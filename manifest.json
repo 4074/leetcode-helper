@@ -7,12 +7,12 @@
 
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "popup.html"
+    "default_popup": "html/popup.html"
   },
   "content_scripts": [
     {
       "matches": ["http://*/*","https://*/*"],
-      "js": ["jquery.js", "main.js"]
+      "js": ["lib/jquery.js", "lib/to-markdown.js", "js/helper/helper.js", "js/helper/helper-getter.js", "js/main.js"]
     }
   ],
   "permissions": [
