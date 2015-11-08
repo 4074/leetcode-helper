@@ -1,7 +1,27 @@
 
-.lch-container {
+a.lch-btn-markdown {
+	display: inline-block;
 	position: absolute;
-	width: 100%;
-	height: 40px;
-	background: #36aeb1;
+	top: 0;
+	margin: 4px 4px 10px;
+	padding: 5px;
+	background-color: #1dcd00;
+	border-radius: 2px;
+	color: #fff;
+    font-size: 12px;
+    line-height: 1;
+	text-decoration: none;
+}
+a.lch-btn-markdown:hover, a.lch-btn-markdown:focus, a.lch-btn-markdown:active {
+	color: rgba(255, 255, 255, .8);
+	text-decoration: none;
+}
+.popover.lch-popover {
+	max-width: none;
+}
+.lch-popover-markdown {
+	width: 600px;
+}
+.lch-popover-markdown pre {
+	border: 0;
 }

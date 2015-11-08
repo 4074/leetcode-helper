@@ -4,8 +4,8 @@
 	
 	Getter.prototype.getQuestionMarkdown = function(){
 		var question = this.getQuestionInfo()
-		var content = this.clearContentMarkdown(toMarkdown(question.content))
-		var md = toMarkdown(question.title)+ '\n\n' + content
+		var content = this.clearContentMarkdown(this.transToMd(question.content))
+		var md = this.transToMd(question.title)+ '\n\n' + content
 		
 		return md
 
@@ -29,6 +29,10 @@
 		.replace(/\<\/pre\>/g, '```')
 		
 		return md
+	}
+	
+	Getter.prototype.transToMd = function(html){
+		return html ? toMarkdown(html) : ''
 	}
 	
 	Helper.getter = new Getter()
