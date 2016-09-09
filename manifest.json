@@ -4,11 +4,6 @@
   "name": "Leetcode Helper",
   "description": "This extension is a useful helper when you code at leetcode.com.\n1.Copy the question for markdown.",
   "version": "0.1",
-
-  // "browser_action": {
-  //   "default_icon": "icon.png",
-  //   "default_popup": "html/popup.html"
-  // },
   "content_scripts": [
     {
       "matches": ["*://*.leetcode.com/*"],
