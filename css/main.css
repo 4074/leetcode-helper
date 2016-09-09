@@ -2,8 +2,8 @@
 a.lch-btn-markdown {
 	display: inline-block;
 	position: absolute;
-	top: 0;
-	margin: 4px 4px 10px;
+	top: 16px;
+	margin-left: 60px;
 	padding: 5px;
 	background-color: #1dcd00;
 	border-radius: 2px;
