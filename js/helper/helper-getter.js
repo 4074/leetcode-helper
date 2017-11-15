@@ -5,9 +5,11 @@
 	Getter.prototype.getQuestionMarkdown = function(){
 		var question = this.getQuestionInfo()
 		var content = this.clearContentMarkdown(this.transToMd(question.content))
+
 		var md = this.transToMd(question.title) + '\n\n'
 			+ this.transToMd(question.info) + '\n\n'
-			+ content
+			+ content + '\n\n'
+			+ question.answer
 
 		return md
 
@@ -19,30 +21,42 @@
 		var $title = $('.question-title h3')
 		var title = '<h3><a href="' + url + '">' + $title.html() + '</a></h3>'
 
-		var info = $('.question-info li').last().html()
+		var $difficulty = $('.side-bar-list li').first()
+		var info = $difficulty.find('span:first').text() + ' **' + $difficulty.find('span:last').text() + '**'
 
-		var $content = $('.question-content').clone()
+		// Content
+		var $content = $('.question-description').clone()
 		$content.find('a').remove()
 		$content.find(':hidden').show()
-		$content.find('>div:not(.spoilers)').remove()
 		var content = $content.html()
+
+		// Answer
+		var $answer = $('#submission-form-app .CodeMirror-code').clone()
+		$answer.find('.CodeMirror-linenumber').remove()
+		var answer_lines = []
+		$answer.find('.CodeMirror-line').each(function() {
+			var $line = $(this)
+			answer_lines.push($line.text())
+		})
+		var answer = '#### My Solution' + '\n```\n' + answer_lines.join('\n') + '\n```'
 
 		return {
 			url: url,
 			title: title,
 			info: info,
-			content: content
+			content: content,
+			answer: answer
 		}
 	}
 
 	Getter.prototype.clearContentMarkdown = function(md){
 		md = md
 		.replace(/\*\*Credits[^\v]*/g, '')
-		.replace(/\<pre\>/g, '```\n')
+		.replace(/\<pre[^\>]*\>/g, '```\n')
 		.replace(/\<\/pre\>/g, '```')
+		.replace(/\<sup[^\>]*\>/g, '<sup>')
 		.replace(/\<div[^\>]*\>/g, '')
 		.replace(/\<\/div\>/g, '')
-
 		return md
 	}
 

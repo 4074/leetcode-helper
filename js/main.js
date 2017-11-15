@@ -10,9 +10,9 @@
 	init()
 	
 	function renderMdBtn() {
-		var $btn = $('<a class="lch-btn-markdown" href="javascript:void(0);">').html('Copy the question')
+		var $btn = $('<a class="lch-btn-markdown" href="javascript:void(0);">').html('Copy for Markdown')
 		
-		$btn.appendTo($title)
+		$btn.appendTo($title.parent())
 		bindMdCopy('.lch-btn-markdown', $btn)
 		//bindMdPopover($btn)
 	}
