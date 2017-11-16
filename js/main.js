@@ -1,6 +1,5 @@
 
 + function(){
-	var md = Helper.getter.getQuestionMarkdown()
 	var $body = $('body')
 	var $title = $('.question-title h3')
 	
@@ -23,7 +22,7 @@
 	function bindMdCopy(selector, $btn){
 		var clipboard = new Clipboard(selector, {
 			text: function(){
-				return md
+				return Helper.getter.getQuestionMarkdown()
 			}
 		})
 		
@@ -39,7 +38,7 @@
 	function bindMdPopover($elem){
 		var options = {
 			title: 'Markdown',
-			content: '<div class="lch-popover-markdown"><pre>' + md + '</pre><div>',
+			content: '<div class="lch-popover-markdown"><pre>' + Helper.getter.getQuestionMarkdown() + '</pre><div>',
 			html: true,
 			placement: 'bottom',
 			template: '<div class="popover lch-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
