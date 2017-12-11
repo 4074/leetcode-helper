@@ -1,28 +1,29 @@
 
 + function(){
 	var $body = $('body')
-	var $title = $('.question-title h3')
+	var $title = $('.question-title h3').parent()
 	
 	function init(){
-		renderMdBtn()
+		if ($title.length) {
+			renderCopyButton()
+		}
 	}
 	init()
 	
-	function renderMdBtn() {
+	function renderCopyButton() {
 		var $btn = $('<a class="lch-btn-markdown" href="javascript:void(0);">').html('Copy for Markdown')
 		
-		$btn.appendTo($title.parent())
-		bindMdCopy('.lch-btn-markdown', $btn)
-		//bindMdPopover($btn)
+		$btn.appendTo($title)
+		bindCopyButton('.lch-btn-markdown', $btn)
 	}
 	
 	/**
 	 * bind $btn click to copy the markdown
 	 */
-	function bindMdCopy(selector, $btn){
+	function bindCopyButton(selector, $btn){
 		var clipboard = new Clipboard(selector, {
 			text: function(){
-				return Helper.getter.getQuestionMarkdown()
+				return Helper.getter.getQuestionMarkdown(window.location.href, $body)
 			}
 		})
 		
@@ -34,16 +35,5 @@
 			$btn.data('bs.tooltip').$tip.find('.tooltip-inner').html('Copied!')
 		})
 	}
-	
-	function bindMdPopover($elem){
-		var options = {
-			title: 'Markdown',
-			content: '<div class="lch-popover-markdown"><pre>' + Helper.getter.getQuestionMarkdown() + '</pre><div>',
-			html: true,
-			placement: 'bottom',
-			template: '<div class="popover lch-popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
-		}
-		$elem.popover(options)
-	}
-	
+
 }()
