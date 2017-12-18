@@ -39,7 +39,7 @@
 			var $line = $(this)
 			answer_lines.push($line.text())
 		})
-		var answer = '#### My Solution' + '\n```\n' + answer_lines.join('\n') + '\n```'
+		var answer = '#### Solution' + '\n```\n' + answer_lines.join('\n') + '\n```'
 
 		return {
 			url: url,

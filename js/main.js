@@ -1,11 +1,17 @@
 
-+ function(){
+$(function(){
 	var $body = $('body')
-	var $title = $('.question-title h3').parent()
+	var $title
 	
 	function init(){
+		$title = $('.question-title h3').parent()
+
+		// LeetCode render question dom lazily.
+		// Therefore, set a timer to render copy button.
 		if ($title.length) {
 			renderCopyButton()
+		} else {
+			setTimeout(init, 1000)
 		}
 	}
 	init()
@@ -36,4 +42,4 @@
 		})
 	}
 
-}()
+})
