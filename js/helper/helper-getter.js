@@ -31,7 +31,7 @@
 		var content = $content.html()
 
 		// Answer
-    var $answer = $wrap.find('#submission-form-app .CodeMirror-code').clone()
+    var $answer = $wrap.find('.CodeMirror-code').first().clone()
     var answer_lines = []
 
 		$answer.find('.CodeMirror-linenumber').remove()
