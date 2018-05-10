@@ -17,15 +17,24 @@
 	Getter.prototype.getQuestionInfo = function(url, $wrap){
 
     // Title
-		var $title = $wrap.find('.question-title h3')
-		var title = '<h3><a href="' + url + '">' + $title.html() + '</a></h3>'
+		var $title = $wrap.find('.question-title h3').clone()
+		var $originTitle = $title.find('span[data-original-title]')
+		var title = $title.html()
+		if ($originTitle.length) {
+			var originTitle = $originTitle.attr('data-original-title')
+			$originTitle.remove()
+			title = $title.html() + '(' + originTitle + ')'
+		}
+		title = '<h3><a href="' + url + '">' + title + '</a></h3>'
 
     // Difficulty
 		var $difficulty = $wrap.find('.side-bar-list li').first()
 		var info = $difficulty.find('span:first').text() + ' **' + $difficulty.find('span:last').text() + '**'
 
 		// Content
-		var $content = $wrap.find('.question-description').clone()
+		var $content = this.getContentElement($wrap) //.find('.question-description').clone()
+		// Remove tranlation switch for leetcode-cn.com
+		$content.find('.translation-tool').remove()
 		$content.find('a').remove()
 		$content.find(':hidden').show()
 		var content = $content.html()
@@ -48,6 +57,21 @@
 			content: content,
 			answer: answer
 		}
+	}
+	
+	Getter.prototype.getContentElement = function($wrap) {
+		var $divs = $wrap.find('div')
+		var $content
+		$divs.each(function (){
+			if (!$content) {
+				var $el = $(this)
+				if (($el.attr('class') || '').indexOf('question-description') >= 0) {
+					$content = $el.clone()
+					return false
+				}
+			}
+		})
+		return $content
 	}
 
 	Getter.prototype.clearContentMarkdown = function(md){
