@@ -1,6 +1,6 @@
 # Leetcode Helper
 
-A chrome extension helps you have fun at [leetcode.com](https://leetcode.com).
+A chrome extension helps you have fun at [leetcode.com](https://leetcode.com) and [leetcode-cn.com](https://leetcode-cn.com).
 
 [https://chrome.google.com/webstore/detail/leetcode-helper/gleoepapfjkpcijfmchfabbnldejdnoj](https://chrome.google.com/webstore/detail/leetcode-helper/gleoepapfjkpcijfmchfabbnldejdnoj)
 
