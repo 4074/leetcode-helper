@@ -30,7 +30,9 @@ Given s = "hello", return "olleh".
 
 #### My Solution
 
-/```
+Language: **JavaScript**
+
+/```javascript
 /**
  * @param {string} s
  * @return {string}

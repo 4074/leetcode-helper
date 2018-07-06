@@ -44,13 +44,17 @@
 		// Answer
 		var $answer = $wrap.find('.CodeMirror-code').first().clone()
 		var answer_lines = []
-
+		var answer_language = $wrap.find('.language-select-wrapper .Select-value-label').text()
 		$answer.find('.CodeMirror-linenumber').remove()
 		$answer.find('.CodeMirror-line').each(function () {
 			var $line = $(this)
 			answer_lines.push($line.text())
 		})
-		var answer = '#### Solution' + '\n```\n' + answer_lines.join('\n') + '\n```'
+		var answer ='#### Solution'
+		+ '\n\nLanguage: **' + answer_language + '**'
+		+ '\n\n```'+ answer_language.toLowerCase()+ '\n'
+			+ answer_lines.join('\n')
+		+ '\n```'
 
 		return {
 			url: url,
