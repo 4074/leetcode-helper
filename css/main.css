@@ -12,6 +12,9 @@ a.lch-btn-markdown {
     line-height: 1;
 	text-decoration: none;
 }
+a.lch-btn-en {
+	top: 8px;
+}
 a.lch-btn-markdown:hover, a.lch-btn-markdown:focus, a.lch-btn-markdown:active {
 	color: rgba(255, 255, 255, .8);
 	text-decoration: none;

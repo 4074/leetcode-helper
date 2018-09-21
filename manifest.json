@@ -3,18 +3,18 @@
 
   "name": "Leetcode Helper",
   "description": "This extension is a useful helper when you code at leetcode.com and leetcode-cn.com.\n1.Copy the question for markdown.",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "content_scripts": [
     {
       "matches": ["*://*.leetcode.com/*", "*://leetcode-cn.com/*"],
       "css": [
         "lib/bootstrap/css/bootstrap.min.css",
         "lib/ionicons/css/ionicons.css",
+        "lib/hint.min.css",
         "css/main.css"
       ],
       "js": [
         "lib/jquery.js",
-        "lib/bootstrap/js/bootstrap.min.js",
         "lib/clipboard.min.js",
         "lib/to-markdown.js",
         "js/helper/helper.js",
