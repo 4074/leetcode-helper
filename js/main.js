@@ -2,10 +2,16 @@
 $(function(){
 	var $body = $('body')
 	var $title, $btn
-	var isCn = window.location.origin.indexOf('leetcode-cn.com') > 0
+	var isNewUI = false
 	
 	function init(){
-		$title = isCn ? $('.question-title h3').parent() : $('h1')
+		$title = $('.question-title h3')
+		if ($title.length) {
+			$title = $title.parent()
+		} else {
+			isNewUI = true
+			$title = $('h1')
+		}
 
 		// LeetCode render question dom lazily.
 		// Therefore, set a timer to render copy button.
@@ -19,7 +25,7 @@ $(function(){
 	
 	function renderCopyButton() {
 		$btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
-		$btn.addClass(isCn ? 'lch-btn-cn' : 'lch-btn-en')
+		$btn.addClass(isNewUI ? 'lch-btn-cn' : 'lch-btn-en')
 		
 		$btn.appendTo($title)
 		bindCopyButton('.lch-btn-markdown', $btn)
@@ -31,7 +37,7 @@ $(function(){
 	function bindCopyButton(selector, $btn){
 		var clipboard = new Clipboard(selector, {
 			text: function(){
-				return Helper.getter.getQuestionMarkdown(window.location.href, $body, isCn)
+				return Helper.getter.getQuestionMarkdown(window.location.href, $body)
 			}
 		})
 		

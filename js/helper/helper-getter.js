@@ -2,8 +2,8 @@
 
 	var Getter = function () { };
 
-	Getter.prototype.getQuestionMarkdown = function (url, $wrap, isCn) {
-		var question = isCn ? this.getQuestionInfoCN(url, $wrap) : this.getQuestionInfoEN(url, $wrap)
+	Getter.prototype.getQuestionMarkdown = function (url, $wrap) {
+		var question = this.getQuestionInfo(url, $wrap)
 		var content = this.clearContentMarkdown(this.translateToMarkdown(question.content))
 		
 		var md = this.translateToMarkdown(question.title) + '\n\n'
@@ -13,10 +13,16 @@
 		return md
 	}
 
-	Getter.prototype.getQuestionInfoCN = function (url, $wrap) {
+	Getter.prototype.getQuestionInfo = function (url, $wrap) {
 
 		// Title
-		var $title = $wrap.find('.question-title h3').clone()
+		var $title = $wrap.find('.question-title h3')
+		if ($title.length) {
+			$title = $title.clone()
+		} else {
+			return this.getQuestionInfoForNewUI(url, $wrap)
+		}
+		
 		var $originTitle = $title.find('span[data-original-title]')
 		var title = $title.html()
 		if ($originTitle.length) {
@@ -65,7 +71,7 @@
 		}
 	}
 
-	Getter.prototype.getQuestionInfoEN = function (url, $wrap) {
+	Getter.prototype.getQuestionInfoForNewUI = function (url, $wrap) {
 
 		// Title
 		var $title = this.findByClassName($wrap, 'h1', 'title').clone()
