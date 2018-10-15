@@ -91,7 +91,7 @@
 		var info = $difficultySpan.eq(0).text() + ' **' + $difficultySpan.eq(1).text() + '**'
 
 		// Content
-		var $content = this.findByClassName($wrap, 'div', 'content-wrapper').clone()
+		var $content = this.findByClassName(this.findByClassName($wrap, 'div', 'description'), 'div', 'content').clone()
 		// Remove tranlation switch for leetcode-cn.com
 		var $translation = this.findByClassName($content, 'div', 'translation-tool')
 		if ($translation) {
