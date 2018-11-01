@@ -1,11 +1,13 @@
 
 $(function(){
 	var $body = $('body')
-	var $title, $btn
 	var isNewUI = false
-	
+
+	listenDomChange($body[0])
+	init()
+
 	function init(){
-		$title = $('.question-title h3')
+		var $title = $('.question-title h3')
 		if ($title.length) {
 			$title = $title.parent()
 		} else {
@@ -16,18 +18,27 @@ $(function(){
 		// LeetCode render question dom lazily.
 		// Therefore, set a timer to render copy button.
 		if ($title.length) {
-			renderCopyButton()
+			if ($title.find('a.lch-btn-markdown').length === 0) {
+				renderCopyButton($title)
+			}
 		} else {
 			setTimeout(init, 1000)
 		}
 	}
-	init()
+
+	function listenDomChange(element) {
+		if (!MutationObserver) return;
+
+		var observer = new MutationObserver(init)
+		observer.observe(element, {
+			childList: true
+		})
+	}
 	
-	function renderCopyButton() {
-		$btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
+	function renderCopyButton($parent) {
+		var $btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
 		$btn.addClass(isNewUI ? 'lch-btn-cn' : 'lch-btn-en')
-		
-		$btn.appendTo($title)
+		$btn.appendTo($parent)
 		bindCopyButton('.lch-btn-markdown', $btn)
 	}
 	
