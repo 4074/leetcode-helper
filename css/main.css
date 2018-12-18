@@ -2,7 +2,6 @@
 a.lch-btn-markdown {
 	display: inline-block;
 	position: absolute;
-	top: 8px;
 	margin-left: 60px;
 	padding: 5px;
 	background-color: #1dcd00;
@@ -13,7 +12,7 @@ a.lch-btn-markdown {
 	text-decoration: none;
 }
 a.lch-btn-en {
-	top: 8px;
+	margin-top: 8px;
 }
 a.lch-btn-markdown:hover, a.lch-btn-markdown:focus, a.lch-btn-markdown:active {
 	color: rgba(255, 255, 255, .8);

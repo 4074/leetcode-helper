@@ -1,7 +1,9 @@
 
 $(function(){
 	var $body = $('body')
-	var isNewUI = false
+	var isCN = window.location.host.indexOf('cn') >= 0 
+	var maxTryTimes = 20
+	var times = 0
 
 	listenDomChange($body[0])
 	init()
@@ -11,8 +13,11 @@ $(function(){
 		if ($title.length) {
 			$title = $title.parent()
 		} else {
-			isNewUI = true
-			$title = $('h1')
+			if (!isCN) {
+				$title = $('[data-key=description-content] div div div').eq(0)
+			} else {
+				$title = $('h4')
+			}
 		}
 
 		// LeetCode render question dom lazily.
@@ -22,7 +27,10 @@ $(function(){
 				renderCopyButton($title)
 			}
 		} else {
-			setTimeout(init, 1000)
+			times += 1
+			if (times < maxTryTimes) {
+				setTimeout(init, 1000)
+			}
 		}
 	}
 
@@ -37,7 +45,7 @@ $(function(){
 	
 	function renderCopyButton($parent) {
 		var $btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
-		$btn.addClass(isNewUI ? 'lch-btn-cn' : 'lch-btn-en')
+		$btn.addClass(isCN ? 'lch-btn-cn' : 'lch-btn-en')
 		$btn.appendTo($parent)
 		bindCopyButton('.lch-btn-markdown', $btn)
 	}
@@ -53,6 +61,7 @@ $(function(){
 		})
 		
 		clipboard.on('success', function() {
+			console.log('success')
 			$btn.attr("aria-label", 'Copied!')
 			setTimeout(function() {
 				$btn.attr("aria-label", 'Copy to clipboard')
