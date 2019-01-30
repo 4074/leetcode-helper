@@ -9,7 +9,9 @@
 		var md = this.translateToMarkdown(question.title) + '\n\n'
 			+ this.translateToMarkdown(question.info) + '\n\n'
 			+ content + '\n\n'
-			+ question.answer
+
+		// Clear more \n
+		md = md.replace(/\n{4,}/g, '\n\n\n') + question.answer
 		return md
 	}
 
@@ -38,7 +40,7 @@
 
 		// Difficulty
 		var $difficulty = $wrap.find('.side-bar-list li').first()
-		var info = $difficulty.find('span:first').text() + ' **' + $difficulty.find('span:last').text() + '**'
+		var info = $difficulty.find('span:first').text() + ': **' + $difficulty.find('span:last').text() + '**'
 
 		// Content
 		var $content = this.findByClassName($wrap, 'div', 'question-description').clone()
@@ -49,6 +51,10 @@
 		}
 		$content.find('a').remove()
 		$content.find(':hidden').show()
+		$content.find('pre').each(function() {
+			var $pre = $(this)
+			$pre.html($pre.text())
+		})
 		var content = $content.html()
 
 		// Answer
@@ -91,7 +97,7 @@
 		// Difficulty
 		var $difficulty = this.findByClassName($wrap, 'div', 'tools').first()
 		var $difficultySpan = $difficulty.find('span')
-		var info = $difficultySpan.eq(0).text() + ' **' + $difficultySpan.eq(1).text() + '**'
+		var info = $difficultySpan.eq(0).text() + ': **' + $difficultySpan.eq(1).text() + '**'
 
 		// Content
 		var $content = this.findByClassName(this.findByClassName($wrap, 'div', 'description'), 'div', 'content').clone()
@@ -102,12 +108,11 @@
 		}
 		$content.find('a').remove()
 		$content.find(':hidden').show()
-		var content = '<pre>' + $content.find('pre').text() + '</pre>'
-		var contentP = ''
-		$content.find('p').each(function() {
-			contentP += '<p>' + $(this).html() + '</p>'
+		$content.find('pre').each(function() {
+			var $pre = $(this)
+			$pre.html($pre.text())
 		})
-		content = contentP + content
+		content = $content.html()
 
 		// Answer
 		var $answer = $wrap.find('.CodeMirror-code').first().clone()
@@ -149,7 +154,7 @@
 
 		// Difficulty
 		var $difficulty = $description.find('div div div').eq(1).find('div').first()
-		var info = 'Difficulty **' + $difficulty.text() + '**'
+		var info = 'Difficulty: **' + $difficulty.text() + '**'
 
 		// Content
 		var $content = this.findByClassName(this.findByClassName($description, 'div', 'description'), 'div', 'content').clone()
@@ -160,12 +165,11 @@
 		}
 		$content.find('a').remove()
 		$content.find(':hidden').show()
-		var content = '<pre>' + $content.find('pre').text() + '</pre>'
-		var contentP = ''
-		$content.find('p').each(function() {
-			contentP += '<p>' + $(this).html() + '</p>'
+		$content.find('pre').each(function() {
+			var $pre = $(this)
+			$pre.html($pre.text())
 		})
-		content = contentP + content
+		content = $content.html()
 
 		// Answer
 		var $answer = $wrap.find('.CodeMirror-code').first().clone()
