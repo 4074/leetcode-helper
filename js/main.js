@@ -4,11 +4,21 @@ $(function(){
 	var isCN = window.location.host.indexOf('cn') >= 0 
 	var maxTryTimes = 20
 	var times = 0
+	var questionTitle = ''
+	var currentUrl = ''
+	var hasBindCopy = false
 
-	listenDomChange($body[0])
-	init()
+	initIfNeed()
 
-	function init(){
+	window.addEventListener('DOMSubtreeModified', function() {
+		setTimeout(initIfNeed, 1000)
+	})
+
+	function initIfNeed(){
+		if (window.location.href === currentUrl) {
+			return
+		}
+
 		var $title = $('.question-title h3')
 		if ($title.length) {
 			$title = $title.parent()
@@ -23,24 +33,17 @@ $(function(){
 		// LeetCode render question dom lazily.
 		// Therefore, set a timer to render copy button.
 		if ($title.length) {
-			if ($title.find('a.lch-btn-markdown').length === 0) {
+			if ($title.find('a.lch-btn-markdown').length === 0 || window.location.href !== currentUrl) {
+				currentUrl = window.location.href
+				questionTitle = $title.first().text()
 				renderCopyButton($title)
 			}
 		} else {
 			times += 1
 			if (times < maxTryTimes) {
-				setTimeout(init, 1000)
+				setTimeout(initIfNeed, 1000)
 			}
 		}
-	}
-
-	function listenDomChange(element) {
-		if (!MutationObserver) return;
-
-		var observer = new MutationObserver(init)
-		observer.observe(element, {
-			childList: true
-		})
 	}
 	
 	function renderCopyButton($parent) {
@@ -54,14 +57,21 @@ $(function(){
 	 * bind $btn click to copy the markdown
 	 */
 	function bindCopyButton(selector, $btn){
+		// Clipboard bind is for window.
+		// After display next question, it is already bind.
+		if (hasBindCopy) {
+			return
+		}
+		hasBindCopy = true
+
 		var clipboard = new Clipboard(selector, {
 			text: function(){
-				return Helper.getter.getQuestionMarkdown(window.location.href, $body)
+				return Helper.getter.getQuestionMarkdown(questionTitle, window.location.href, $body)
 			}
 		})
 		
 		clipboard.on('success', function() {
-			console.log('success')
+			console.log('[Leetcode Helper]Copy success')
 			$btn.attr("aria-label", 'Copied!')
 			setTimeout(function() {
 				$btn.attr("aria-label", 'Copy to clipboard')

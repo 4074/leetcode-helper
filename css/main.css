@@ -6,13 +6,16 @@ a.lch-btn-markdown {
 	padding: 5px;
 	background-color: #1dcd00;
 	border-radius: 2px;
-	color: #fff;
+	color: #fff!important;
     font-size: 12px;
     line-height: 1;
 	text-decoration: none;
 }
 a.lch-btn-en {
 	margin-top: 8px;
+}
+a.lch-btn-cn {
+	margin-top: -2px;
 }
 a.lch-btn-markdown:hover, a.lch-btn-markdown:focus, a.lch-btn-markdown:active {
 	color: rgba(255, 255, 255, .8);
