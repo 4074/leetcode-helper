@@ -3,7 +3,11 @@
 	var Getter = function () { };
 
 	Getter.prototype.getQuestionMarkdown = function (title, url, $wrap) {
-		var question = this.getQuestionInfoForLeetcodeNewUI(title, url, $wrap)
+	    var isContest = url.indexOf('.com/contest/') >= 0
+
+		var question = isContest
+		    ? this.getQuestionInfoForLeetcodeContestUI(title, url, $wrap)
+		    : this.getQuestionInfoForLeetcodeNewUI(title, url, $wrap);
 		var content = this.clearContentMarkdown(this.translateToMarkdown(question.content))
 		
 		var md = this.translateToMarkdown(question.title) + '\n\n'
@@ -137,6 +141,57 @@
 	// 		answer: answer
 	// 	}
 	// }
+
+	Getter.prototype.getQuestionInfoForLeetcodeContestUI = function (title, url, $wrap) {
+	    //Title in parameter is not right
+	    title = document.querySelector("#base_content > div.container > div > div > div.question-title.clearfix > h3").innerText
+        title = '<h3><a href="' + url + '">' + title + '</a></h3>'
+
+        // Info
+        var difficultyText = document.querySelector("#base_content > div.container > div > div > div:nth-child(3) > div > div.contest-question-info.pull-right > ul > li:nth-child(5) > span").textContent;
+        var info = 'Difficulty: **' + difficultyText + '**'
+
+        // Content
+        var $content = this.findByClassName($wrap,'div','question-content').clone();
+        // Remove tranlation switch for leetcode-cn.com
+		var $translation = this.findByClassName($content, 'div', 'translation-tool')
+		if ($translation) {
+			$translation.remove()
+		}
+		$content.find('a').remove()
+		$content.find(':hidden').show()
+		$content.find('pre').each(function() {
+			var $pre = $(this)
+			$pre.html($pre.text())
+		})
+		content = $content.html()
+
+
+        // Answer
+        var answer_language = $wrap.find('.Select-value-label').first().text();
+
+		var $answer = $wrap.find('.CodeMirror-code').first().clone();
+		var answer_lines = []
+		$answer.find('.CodeMirror-linenumber').remove()
+		$answer.find('.CodeMirror-line').each(function () {
+			var $line = $(this)
+			answer_lines.push($line.text())
+		})
+
+		var answer ='#### Solution'
+		+ '\n\nLanguage: **' + answer_language + '**'
+		+ '\n\n```'+ answer_language.toLowerCase()+ '\n'
+			+ answer_lines.join('\n')
+		+ '\n```'
+
+	    return {
+			url: url,
+			title: title,
+			info: info,
+			content: content,
+			answer: answer
+		}
+	}
 
 	Getter.prototype.getQuestionInfoForLeetcodeNewUI = function (title, url, $wrap) {
 		var $description = $('[data-key=description-content]')
