@@ -41,6 +41,15 @@
 			var $pre = $(this)
 			$pre.html($pre.text())
 		})
+
+		// Clear extra span tag
+		$content.find('p').each(function() {
+			var $p = $(this), $children = $p.children()
+			if ($children.length === 1 && $children.get(0).tagName === 'SPAN') {
+				$p.html($children.get(0).innerHTML)
+			}
+			
+		})
 		content = $content.html()
 
 
@@ -96,6 +105,14 @@
 		$content.find('pre').each(function() {
 			var $pre = $(this)
 			$pre.html($pre.text())
+		})
+		// Clear extra span tag
+		$content.find('p').each(function() {
+			var $p = $(this), $children = $p.children()
+			if ($children.length === 1 && $children.get(0).tagName === 'SPAN') {
+				$p.html($children.get(0).innerHTML)
+			}
+			
 		})
 		content = $content.html()
 
