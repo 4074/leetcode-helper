@@ -35,7 +35,9 @@ $(function(){
 		if ($title.length) {
 			if ($title.find('a.lch-btn-markdown').length === 0 || window.location.href !== currentUrl) {
 				currentUrl = window.location.href
-				questionTitle = $title.first().text()
+				var $c = $title.clone()
+				$c.find('a.lch-btn-markdown').remove()
+				questionTitle = $c.first().text()
 				renderCopyButton($title)
 			}
 		} else {
@@ -47,16 +49,17 @@ $(function(){
 	}
 	
 	function renderCopyButton($parent) {
+		$('a.lch-btn-markdown').remove()
 		var $btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
 		$btn.addClass(isCN ? 'lch-btn-cn' : 'lch-btn-en')
 		$btn.appendTo($parent)
-		bindCopyButton('.lch-btn-markdown', $btn)
+		bindCopyButton('.lch-btn-markdown')
 	}
 	
 	/**
 	 * bind $btn click to copy the markdown
 	 */
-	function bindCopyButton(selector, $btn){
+	function bindCopyButton(selector){
 		// Clipboard bind is for window.
 		// After display next question, it is already bind.
 		if (hasBindCopy) {
@@ -71,7 +74,7 @@ $(function(){
 		})
 		
 		clipboard.on('success', function() {
-			console.log('[Leetcode Helper]Copy success')
+			var $btn = $(selector)
 			$btn.attr("aria-label", 'Copied!')
 			setTimeout(function() {
 				$btn.attr("aria-label", 'Copy to clipboard')
