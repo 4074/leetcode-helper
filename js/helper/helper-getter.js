@@ -1,76 +1,43 @@
 +function () {
 
-    var Getter = function () { };
+    var Getter = function () {}
 
     Getter.prototype.getQuestionMarkdown = function (title, url, $wrap) {
-        var isContest = url.indexOf('.com/contest/') >= 0;
+        var isContest = url.indexOf('.com/contest/') >= 0
 
         var question = isContest
             ? this.getQuestionInfoForLeetcodeContestUI(title, url, $wrap)
-            : this.getQuestionInfoForLeetcodeNewUI(title, url, $wrap);
-        var content = this.clearContentMarkdown(this.translateToMarkdown(question.content));
+            : this.getQuestionInfoForLeetcodeNewUI(title, url, $wrap)
 
-        var md = this.translateToMarkdown(question.title) + '\n\n'
+        var markdown = this.translateToMarkdown(question.title) + '\n\n'
             + this.translateToMarkdown(question.info) + '\n\n'
-            + content + '\n\n';
+            + this.clearContentMarkdown(this.translateToMarkdown(question.content)) + '\n\n'
 
         // Clear more \n
-        md = md.replace(/\n{4,}/g, '\n\n\n') + question.answer;
-        return md
+		markdown = markdown.replace(/\n{4,}/g, '\n\n\n') + question.answer
+		
+        return markdown
     };
 
     Getter.prototype.getQuestionInfoForLeetcodeContestUI = function (title, url, $wrap) {
         //Title in parameter is not right
-        title = $wrap.find('h3').text();
-        title = '<h3><a href="' + url + '">' + title + '</a></h3>';
-
+        title = $wrap.find('h3').text()
+        title = '<h3><a href="' + url + '">' + title + '</a></h3>'
 
         // Info
-        var difficultyText = $wrap.find('div.contest-question-info.pull-right > ul > li:nth-child(5) > span').text();
-        var info = 'Difficulty: **' + difficultyText + '**';
-
+        var difficultyText = $wrap.find('div.contest-question-info.pull-right > ul > li:nth-child(5) > span').text()
+        var info = 'Difficulty: **' + difficultyText + '**'
 
         // Content
-        var $content = this.findByClassName($wrap, 'div', 'question-content').clone();
-        // Remove tranlation switch for leetcode-cn.com
-        var $translation = this.findByClassName($content, 'div', 'translation-tool');
-        if ($translation) {
-            $translation.remove()
-        }
-        $content.find('a').remove();
-        $content.find(':hidden').show();
-        $content.find('pre').each(function () {
-            var $pre = $(this);
-            $pre.html($pre.text())
-        });
-
-        // Clear extra span tag
-        $content.find('p').each(function () {
-            var $p = $(this), $children = $p.children();
-            if ($children.length === 1 && $children.get(0).tagName === 'SPAN') {
-                $p.html($children.get(0).innerHTML)
-            }
-
-        });
-        content = $content.html();
-
+        var content = this.getContentFromDOM(
+			this.findByClassName($wrap, 'div', 'question-content')
+		)
 
         // Answer
-        var answer_language = $wrap.find('.Select-value-label').first().text();
-
-        var $answer = $wrap.find('.CodeMirror-code').first().clone();
-        var answer_lines = [];
-        $answer.find('.CodeMirror-linenumber').remove();
-        $answer.find('.CodeMirror-line').each(function () {
-            var $line = $(this);
-            answer_lines.push($line.text())
-        });
-
-        var answer = '#### Solution'
-            + '\n\nLanguage: **' + answer_language + '**'
-            + '\n\n```' + answer_language.toLowerCase() + '\n'
-            + answer_lines.join('\n')
-            + '\n```';
+        var answer = this.getAnswerFromDOM(
+			$wrap.find('.CodeMirror-code').first(),
+			$wrap.find('.Select-value-label').first().text()
+		)
 
         return {
             url: url,
@@ -96,8 +63,28 @@
 		var info = 'Difficulty: **' + difficultyText + '**'
 
 		// Content
-		var $content = this.findByClassName(this.findByClassName($description, 'div', 'description'), 'div', 'content').clone()
+		var content = this.getContentFromDOM(
+			this.findByClassName(this.findByClassName($description, 'div', 'description'), 'div', 'content')
+		)
+
+		// Answer
+		var answer = this.getAnswerFromDOM(
+			$wrap.find('.CodeMirror-code').first(),
+			$wrap.find('.ant-select-selection-selected-value').first().text()
+		)
+
+		return {
+			url: url,
+			title: title,
+			info: info,
+			content: content,
+			answer: answer
+		}
+	}
+
+	Getter.prototype.getContentFromDOM = function ($content) {
 		// Remove tranlation switch for leetcode-cn.com
+		$content = $content.clone()
 		var $translation = this.findByClassName($content, 'div', 'translation-tool')
 		if ($translation) {
 			$translation.remove()
@@ -116,30 +103,24 @@
 			}
 
 		})
-		content = $content.html()
 
-		// Answer
-		var $answer = $wrap.find('.CodeMirror-code').first().clone()
-		var answer_lines = []
-		var answer_language = $wrap.find('.ant-select-selection-selected-value').first().text()
+		return $content.html()
+	}
+
+	Getter.prototype.getAnswerFromDOM = function($answer, language) {
+		$answer = $answer.clone()
+		var answerLines = []
 		$answer.find('.CodeMirror-linenumber').remove()
 		$answer.find('.CodeMirror-line').each(function () {
 			var $line = $(this)
-			answer_lines.push($line.text())
+			answerLines.push($line.text())
 		})
-		var answer ='#### Solution'
-		+ '\n\nLanguage: **' + answer_language + '**'
-		+ '\n\n```'+ answer_language.toLowerCase()+ '\n'
-			+ answer_lines.join('\n')
-		+ '\n```'
 
-		return {
-			url: url,
-			title: title,
-			info: info,
-			content: content,
-			answer: answer
-		}
+		return '#### Solution'
+		+ '\n\nLanguage: **' + language + '**'
+		+ '\n\n```'+ language.toLowerCase()+ '\n'
+			+ answerLines.join('\n')
+		+ '\n```'
 	}
 
 	Getter.prototype.findByClassName = function ($wrap, tag, name) {
