@@ -1,83 +1,85 @@
-+ function () {
++function () {
 
-	var Getter = function () { };
+    var Getter = function () { };
 
-	Getter.prototype.getQuestionMarkdown = function (title, url, $wrap) {
-	    var isContest = url.indexOf('.com/contest/') >= 0
+    Getter.prototype.getQuestionMarkdown = function (title, url, $wrap) {
+        var isContest = url.indexOf('.com/contest/') >= 0;
 
-		var question = isContest
-		    ? this.getQuestionInfoForLeetcodeContestUI(title, url, $wrap)
-		    : this.getQuestionInfoForLeetcodeNewUI(title, url, $wrap);
-		var content = this.clearContentMarkdown(this.translateToMarkdown(question.content))
-		
-		var md = this.translateToMarkdown(question.title) + '\n\n'
-			+ this.translateToMarkdown(question.info) + '\n\n'
-			+ content + '\n\n'
+        var question = isContest
+            ? this.getQuestionInfoForLeetcodeContestUI(title, url, $wrap)
+            : this.getQuestionInfoForLeetcodeNewUI(title, url, $wrap);
+        var content = this.clearContentMarkdown(this.translateToMarkdown(question.content));
 
-		// Clear more \n
-		md = md.replace(/\n{4,}/g, '\n\n\n') + question.answer
-		return md
-	}
+        var md = this.translateToMarkdown(question.title) + '\n\n'
+            + this.translateToMarkdown(question.info) + '\n\n'
+            + content + '\n\n';
 
-	Getter.prototype.getQuestionInfoForLeetcodeContestUI = function (title, url, $wrap) {
-	    //Title in parameter is not right
-	    title = document.querySelector("#base_content > div.container > div > div > div.question-title.clearfix > h3").innerText
-        title = '<h3><a href="' + url + '">' + title + '</a></h3>'
+        // Clear more \n
+        md = md.replace(/\n{4,}/g, '\n\n\n') + question.answer;
+        return md
+    };
+
+    Getter.prototype.getQuestionInfoForLeetcodeContestUI = function (title, url, $wrap) {
+        //Title in parameter is not right
+        title = $wrap.find('h3').text();
+        title = '<h3><a href="' + url + '">' + title + '</a></h3>';
+
 
         // Info
-        var difficultyText = document.querySelector("#base_content > div.container > div > div > div:nth-child(3) > div > div.contest-question-info.pull-right > ul > li:nth-child(5) > span").textContent;
-        var info = 'Difficulty: **' + difficultyText + '**'
+        var difficultyText = $wrap.find('div.contest-question-info.pull-right > ul > li:nth-child(5) > span').text();
+        var info = 'Difficulty: **' + difficultyText + '**';
+
 
         // Content
-        var $content = this.findByClassName($wrap,'div','question-content').clone();
+        var $content = this.findByClassName($wrap, 'div', 'question-content').clone();
         // Remove tranlation switch for leetcode-cn.com
-		var $translation = this.findByClassName($content, 'div', 'translation-tool')
-		if ($translation) {
-			$translation.remove()
-		}
-		$content.find('a').remove()
-		$content.find(':hidden').show()
-		$content.find('pre').each(function() {
-			var $pre = $(this)
-			$pre.html($pre.text())
-		})
+        var $translation = this.findByClassName($content, 'div', 'translation-tool');
+        if ($translation) {
+            $translation.remove()
+        }
+        $content.find('a').remove();
+        $content.find(':hidden').show();
+        $content.find('pre').each(function () {
+            var $pre = $(this);
+            $pre.html($pre.text())
+        });
 
-		// Clear extra span tag
-		$content.find('p').each(function() {
-			var $p = $(this), $children = $p.children()
-			if ($children.length === 1 && $children.get(0).tagName === 'SPAN') {
-				$p.html($children.get(0).innerHTML)
-			}
-			
-		})
-		content = $content.html()
+        // Clear extra span tag
+        $content.find('p').each(function () {
+            var $p = $(this), $children = $p.children();
+            if ($children.length === 1 && $children.get(0).tagName === 'SPAN') {
+                $p.html($children.get(0).innerHTML)
+            }
+
+        });
+        content = $content.html();
 
 
         // Answer
         var answer_language = $wrap.find('.Select-value-label').first().text();
 
-		var $answer = $wrap.find('.CodeMirror-code').first().clone();
-		var answer_lines = []
-		$answer.find('.CodeMirror-linenumber').remove()
-		$answer.find('.CodeMirror-line').each(function () {
-			var $line = $(this)
-			answer_lines.push($line.text())
-		})
+        var $answer = $wrap.find('.CodeMirror-code').first().clone();
+        var answer_lines = [];
+        $answer.find('.CodeMirror-linenumber').remove();
+        $answer.find('.CodeMirror-line').each(function () {
+            var $line = $(this);
+            answer_lines.push($line.text())
+        });
 
-		var answer ='#### Solution'
-		+ '\n\nLanguage: **' + answer_language + '**'
-		+ '\n\n```'+ answer_language.toLowerCase()+ '\n'
-			+ answer_lines.join('\n')
-		+ '\n```'
+        var answer = '#### Solution'
+            + '\n\nLanguage: **' + answer_language + '**'
+            + '\n\n```' + answer_language.toLowerCase() + '\n'
+            + answer_lines.join('\n')
+            + '\n```';
 
-	    return {
-			url: url,
-			title: title,
-			info: info,
-			content: content,
-			answer: answer
-		}
-	}
+        return {
+            url: url,
+            title: title,
+            info: info,
+            content: content,
+            answer: answer
+        }
+    };
 
 	Getter.prototype.getQuestionInfoForLeetcodeNewUI = function (title, url, $wrap) {
 		var $description = $('[data-key=description-content]')
@@ -112,7 +114,7 @@
 			if ($children.length === 1 && $children.get(0).tagName === 'SPAN') {
 				$p.html($children.get(0).innerHTML)
 			}
-			
+
 		})
 		content = $content.html()
 
