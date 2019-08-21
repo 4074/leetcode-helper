@@ -44,6 +44,7 @@ $(function () {
         var $c = $title.clone()
         $c.find('a.lch-btn-markdown').remove()
         questionTitle = $c.first().text()
+        $title.css({position: 'relative'})
         renderCopyButton($title)
       }
     } else {
