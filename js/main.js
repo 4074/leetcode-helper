@@ -1,23 +1,29 @@
-
 $(function(){
 	var $body = $('body')
-	var isCN = window.location.host.indexOf('cn') >= 0 
-	var maxTryTimes = 20
+	var isCN = window.location.host.indexOf('cn') >= 0
+
+	// Try times
 	var times = 0
+	var maxTryTimes = 20
+	
 	var questionTitle = ''
 	var currentUrl = ''
 	var hasBindCopy = false
 
-	initIfNeed()
+	init()
 
+	// Listen DOM modified, call the init method
 	window.addEventListener('DOMSubtreeModified', function() {
-		setTimeout(initIfNeed, 1000)
+		setTimeout(init, 1000)
 	})
 
-	function initIfNeed(){
-		if (window.location.href === currentUrl) {
-			return
-		}
+	/**
+	 * The main function.
+	 * Find out the title DOM of question, render copy button behind it.
+	 */
+	function init(){
+		// Avoid init repeatedly
+		if (window.location.href === currentUrl) return;
 
 		var $title = $('.question-title h3')
 		if ($title.length) {
@@ -43,11 +49,16 @@ $(function(){
 		} else {
 			times += 1
 			if (times < maxTryTimes) {
-				setTimeout(initIfNeed, 1000)
+				setTimeout(init, 1000)
 			}
 		}
 	}
 	
+	/**
+	 * Render Copy button behind question title.
+	 * 
+	 * @param {jQueryDOM} $parent 
+	 */
 	function renderCopyButton($parent) {
 		$('a.lch-btn-markdown').remove()
 		var $btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
@@ -57,16 +68,18 @@ $(function(){
 	}
 	
 	/**
-	 * bind $btn click to copy the markdown
+	 * Bind button click event, copy the markdown of question to clipboard.
+	 * 
+	 * @param {String} selector the css selector to find button
 	 */
 	function bindCopyButton(selector){
 		// Clipboard bind is for window.
 		// After display next question, it is already bind.
-		if (hasBindCopy) {
-			return
-		}
+		if (hasBindCopy) return;
+
 		hasBindCopy = true
 
+		// Init Clipboard plugin
 		var clipboard = new Clipboard(selector, {
 			text: function(){
 				return Helper.getter.getQuestionMarkdown(questionTitle, window.location.href, $body)
@@ -75,7 +88,11 @@ $(function(){
 		
 		clipboard.on('success', function() {
 			var $btn = $(selector)
+
+			// Set copied tips
 			$btn.attr("aria-label", 'Copied!')
+
+			// Reset tips
 			setTimeout(function() {
 				$btn.attr("aria-label", 'Copy to clipboard')
 			}, 2000)
