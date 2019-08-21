@@ -17,10 +17,10 @@ $(function () {
     setTimeout(init, 1000)
   })
 
-	/**
-	 * The main function.
-	 * Find out the title DOM of question, render copy button behind it.
-	 */
+  /**
+   * The main function.
+   * Find out the title DOM of question, render copy button behind it.
+   */
   function init() {
     // Avoid init repeatedly
     if (window.location.href === currentUrl) return;
@@ -54,11 +54,11 @@ $(function () {
     }
   }
 
-	/**
-	 * Render Copy button behind question title.
-	 * 
-	 * @param {jQueryDOM} $parent 
-	 */
+  /**
+   * Render Copy button behind question title.
+   * 
+   * @param {jQueryDOM} $parent 
+   */
   function renderCopyButton($parent) {
     $('a.lch-btn-markdown').remove()
     var $btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
@@ -67,11 +67,11 @@ $(function () {
     bindCopyButton('.lch-btn-markdown')
   }
 
-	/**
-	 * Bind button click event, copy the markdown of question to clipboard.
-	 * 
-	 * @param {String} selector the css selector to find button
-	 */
+  /**
+   * Bind button click event, copy the markdown of question to clipboard.
+   * 
+   * @param {String} selector the css selector to find button
+   */
   function bindCopyButton(selector) {
     // Clipboard bind is for window.
     // After display next question, it is already bind.

@@ -2,15 +2,15 @@
 
   var Getter = function () { }
 
-	/**
-	 * Return markdown for question
-	 * 
-	 * @param {String} title
-	 * @param {String} url
-	 * @param {jQueryDOM} $wrap
-	 * @return {String}
-	 * @api public
-	 */
+  /**
+   * Return markdown for question
+   * 
+   * @param {String} title
+   * @param {String} url
+   * @param {jQueryDOM} $wrap
+   * @return {String}
+   * @api public
+   */
   Getter.prototype.getQuestionMarkdown = function (title, url, $wrap) {
     var isContest = url.indexOf('.com/contest/') >= 0
 
@@ -28,16 +28,16 @@
     return markdown
   }
 
-	/**
-	 * Get question info for problem page
-	 * 
-	 * @param {String} title
-	 * @param {String} url
-	 * @param {jQueryDOM} $wrap
-	 * @return {Object<String>} info {url, title, info, content, answer}
-	 * @api private
-	 * 
-	 */
+  /**
+   * Get question info for problem page
+   * 
+   * @param {String} title
+   * @param {String} url
+   * @param {jQueryDOM} $wrap
+   * @return {Object<String>} info {url, title, info, content, answer}
+   * @api private
+   * 
+   */
   Getter.prototype.getQuestionInfoForProblem = function (title, url, $wrap) {
     var $description = $('[data-key=description-content]')
     // Title
@@ -72,16 +72,16 @@
     }
   }
 
-	/**
-	 * Get question info for contest page
-	 * 
-	 * @param {String} title
-	 * @param {String} url
-	 * @param {jQueryDOM} $wrap
-	 * @return {Object<String>} info {url, title, info, content, answer}
-	 * @api private
-	 * 
-	 */
+  /**
+   * Get question info for contest page
+   * 
+   * @param {String} title
+   * @param {String} url
+   * @param {jQueryDOM} $wrap
+   * @return {Object<String>} info {url, title, info, content, answer}
+   * @api private
+   * 
+   */
   Getter.prototype.getQuestionInfoForContest = function (title, url, $wrap) {
     //Title in parameter is not right
     title = $wrap.find('h3').text()
@@ -111,13 +111,13 @@
     }
   }
 
-	/**
-	 * Get question content from DOM
-	 * 
-	 * @param {jQueryDOM} $content
-	 * @return {String} content
-	 * @api private
-	 */
+  /**
+   * Get question content from DOM
+   * 
+   * @param {jQueryDOM} $content
+   * @return {String} content
+   * @api private
+   */
   Getter.prototype.getContentFromDOM = function ($content) {
     // Clone
     $content = $content.clone()
@@ -144,14 +144,14 @@
     return $content.html()
   }
 
-	/**
-	 * Get question answer from DOM
-	 * 
-	 * @param {jQueryDOM} $answer
-	 * @param {String} language answer code language
-	 * @return {String} answer
-	 * @api private
-	 */
+  /**
+   * Get question answer from DOM
+   * 
+   * @param {jQueryDOM} $answer
+   * @param {String} language answer code language
+   * @return {String} answer
+   * @api private
+   */
   Getter.prototype.getAnswerFromDOM = function ($answer, language) {
     $answer = $answer.clone()
     var answerLines = []
@@ -168,18 +168,18 @@
       + '\n```'
   }
 
-	/**
-	 * Find DOM by fuzzy class name
-	 * Because of front end build tools, class names of DOM has a surfix string.
-	 * Looks like 'question-content__JfgR'.
-	 * This method can find out it by prefix 'question-content'
-	 * 
-	 * @param {jQueryDOM} $wrap
-	 * @param {String} tag tag name of DOM
-	 * @param {String} name prefix of actual class name
-	 * @return {jQueryDOM} $target
-	 * @api private
-	 */
+  /**
+   * Find DOM by fuzzy class name
+   * Because of front end build tools, class names of DOM has a surfix string.
+   * Looks like 'question-content__JfgR'.
+   * This method can find out it by prefix 'question-content'
+   * 
+   * @param {jQueryDOM} $wrap
+   * @param {String} tag tag name of DOM
+   * @param {String} name prefix of actual class name
+   * @return {jQueryDOM} $target
+   * @api private
+   */
   Getter.prototype.findByClassName = function ($wrap, tag, name) {
     var $els = $wrap.find(tag)
     var $target
@@ -196,24 +196,24 @@
     return $target
   }
 
-	/**
-	 * Translate html to markdown using to-markdown.js
-	 * 
-	 * @param {String} html
-	 * @return {String} markdown
-	 * @api private
-	 */
+  /**
+   * Translate html to markdown using to-markdown.js
+   * 
+   * @param {String} html
+   * @return {String} markdown
+   * @api private
+   */
   Getter.prototype.translateToMarkdown = function (html) {
     return html ? toMarkdown(html) : ''
   }
 
-	/**
-	 * Clear markdown string for question content
-	 * 
-	 * @param {String} markdown
-	 * @return {String} clean markdown
-	 * @api private
-	 */
+  /**
+   * Clear markdown string for question content
+   * 
+   * @param {String} markdown
+   * @return {String} clean markdown
+   * @api private
+   */
   Getter.prototype.clearContentMarkdown = function (markdown) {
     return markdown.replace(/\*\*Credits[^\v]*/g, '')
       .replace(/\<pre[^\>]*\>/g, '```\n')
