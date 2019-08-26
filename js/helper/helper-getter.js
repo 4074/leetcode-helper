@@ -221,6 +221,8 @@
       .replace(/\<sup[^\>]*\>/g, '<sup>')
       .replace(/\<div[^\>]*\>/g, '')
       .replace(/\<\/div\>/g, '')
+      // Make sure has \n before ```
+      .replace(/([^\n])```/g, '$1\n```')
   }
 
   Helper.getter = new Getter()
