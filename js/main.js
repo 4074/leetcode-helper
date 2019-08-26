@@ -25,12 +25,15 @@ $(function () {
     // Avoid init repeatedly
     if (window.location.href === currentUrl) return;
 
+    var $buttonWrap
     var $title = $('.question-title h3')
+    
     if ($title.length) {
       $title = $title.parent()
     } else {
       if (!isCN) {
-        $title = $('[data-key=description-content] div div div').eq(0)
+        $buttonWrap = $('[data-key=description-content]')
+        $title = $buttonWrap.find('div div div').eq(0)
       } else {
         $title = $('h4')
       }
@@ -44,8 +47,7 @@ $(function () {
         var $c = $title.clone()
         $c.find('a.lch-btn-markdown').remove()
         questionTitle = $c.first().text()
-        $title.css({position: 'relative'})
-        renderCopyButton($title)
+        renderCopyButton($buttonWrap || $title, !!$buttonWrap)
       }
     } else {
       times += 1
@@ -59,11 +61,13 @@ $(function () {
    * Render Copy button behind question title.
    * 
    * @param {jQueryDOM} $parent 
+   * @param {Boolean} isInContent
    */
-  function renderCopyButton($parent) {
+  function renderCopyButton($parent, isInContent) {
     $('a.lch-btn-markdown').remove()
     var $btn = $('<a class="lch-btn-markdown hint--top" aria-label="Copy to clipboard" href="javascript:void(0);">').html('Copy for Markdown')
     $btn.addClass(isCN ? 'lch-btn-cn' : 'lch-btn-en')
+    isInContent && $btn.addClass('lch-btn-in-content')
     $btn.appendTo($parent)
     bindCopyButton('.lch-btn-markdown')
   }

@@ -17,6 +17,10 @@ a.lch-btn-en {
 a.lch-btn-cn {
 	margin-top: -2px;
 }
+a.lch-btn-in-content {
+	top: 51px;
+	right: 30px;
+}
 a.lch-btn-markdown:hover, a.lch-btn-markdown:focus, a.lch-btn-markdown:active {
 	color: rgba(255, 255, 255, .8);
 	text-decoration: none;
