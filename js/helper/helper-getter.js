@@ -63,6 +63,12 @@
       $wrap.find('.ant-select-selection-selected-value').first().text()
     )
 
+    // Related Topics
+    var topics = this.getTopicsFromDOM($description)
+    if (topics) {
+      info += '<br><br>' + topics
+    }
+
     return {
       url: url,
       title: title,
@@ -169,6 +175,31 @@
   }
 
   /**
+   * Get question related topics from DOM
+   * 
+   * @param {jQueryDOM} $wrap
+   * @return {String} related topics
+   * @api private
+   */
+  Getter.prototype.getTopicsFromDOM = function ($wrap) {
+    var topics = []
+
+    const $title = this.findByClassName($wrap, 'div', function ($el) {
+      return $el.html().indexOf('Related Topics') === 0
+    })
+    if (!$title.length) return ''
+
+    $title.parent().parent().parent().find('div:last').find('a').each(function () {
+      var $el = $(this)
+      topics.push(
+        '<a href="' + location.origin + $el.attr('href') + '">' +  $el.text() + '</a>'
+      )
+    })
+
+    return 'Related Topics: ' + topics.join(', ')
+  }
+
+  /**
    * Find DOM by fuzzy class name
    * Because of front end build tools, class names of DOM has a surfix string.
    * Looks like 'question-content__JfgR'.
@@ -176,7 +207,7 @@
    * 
    * @param {jQueryDOM} $wrap
    * @param {String} tag tag name of DOM
-   * @param {String} name prefix of actual class name
+   * @param {String|Function} name prefix of actual class name
    * @return {jQueryDOM} $target
    * @api private
    */
@@ -186,9 +217,16 @@
     $els.each(function () {
       if (!$target) {
         var $el = $(this)
-        if (($el.attr('class') || '').indexOf(name) >= 0) {
-          $target = $el
-          return false
+        if (typeof name === 'function') {
+          if (name($el)) {
+            $target = $el
+            return false
+          }
+        } else {
+          if (($el.attr('class') || '').indexOf(name) >= 0) {
+            $target = $el
+            return false
+          }
         }
       }
     })

@@ -3,7 +3,7 @@
 
   "name": "Leetcode Helper",
   "description": "This extension is a useful helper when you code at leetcode.com and leetcode-cn.com.\n1.Copy the question for markdown.",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "content_scripts": [
     {
       "matches": ["*://*.leetcode.com/*", "*://leetcode-cn.com/*"],
