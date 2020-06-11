@@ -9,22 +9,30 @@ $(function () {
   var questionTitle = ''
   var currentUrl = ''
   var hasBindCopy = false
+  var timer = null
 
   init()
 
   // Listen DOM modified, call the init method
   window.addEventListener('DOMSubtreeModified', function () {
-    setTimeout(init, 1000)
+    // Check is in description page
+    if (!isInDescriptionPage()) return
+    // Avoid init repeatedly
+    if (window.location.href === currentUrl) return
+
+    runInitDelay()
   })
+
+  function runInitDelay() {
+    clearTimeout(timer)
+    timer = setTimeout(init, 1000)
+  }
 
   /**
    * The main function.
    * Find out the title DOM of question, render copy button behind it.
    */
   function init() {
-    // Avoid init repeatedly
-    if (window.location.href === currentUrl) return;
-
     var $buttonWrap
     var $title = $('.question-title h3')
     
@@ -52,7 +60,7 @@ $(function () {
     } else {
       times += 1
       if (times < maxTryTimes) {
-        setTimeout(init, 1000)
+        runInitDelay()
       }
     }
   }
@@ -102,6 +110,14 @@ $(function () {
         $btn.attr("aria-label", 'Copy to clipboard')
       }, 2000)
     })
+  }
+
+  function isInDescriptionPage() {
+    var urlStrings = window.location.href.split('/')
+    while (urlStrings.length && !urlStrings[urlStrings.length - 1]) {
+      urlStrings.pop()
+    }
+    return urlStrings.length > 2 && urlStrings[urlStrings.length - 2] === 'problems'
   }
 
 })

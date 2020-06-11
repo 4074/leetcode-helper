@@ -184,10 +184,10 @@
   Getter.prototype.getTopicsFromDOM = function ($wrap) {
     var topics = []
 
-    const $title = this.findByClassName($wrap, 'div', function ($el) {
+    var $title = this.findByClassName($wrap, 'div', function ($el) {
       return $el.html().indexOf('Related Topics') === 0
     })
-    if (!$title.length) return ''
+    if (!$title || !$title.length) return ''
 
     $title.parent().parent().parent().find('div:last').find('a').each(function () {
       var $el = $(this)

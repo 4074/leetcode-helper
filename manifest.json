@@ -6,7 +6,7 @@
   "version": "0.2.10",
   "content_scripts": [
     {
-      "matches": ["*://*.leetcode.com/*", "*://leetcode-cn.com/*"],
+      "matches": ["https://leetcode.com/problems/*", "https://leetcode-cn.com/problems/*"],
       "css": [
         "lib/bootstrap/css/bootstrap.min.css",
         "lib/ionicons/css/ionicons.css",
