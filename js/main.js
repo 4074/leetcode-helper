@@ -11,6 +11,19 @@ $(function () {
   var hasBindCopy = false
   var timer = null
 
+  // Load saved options and cache it in memory
+  var options
+  chrome.storage.sync.get({
+    titleLevel: 'h1',
+    includeTitle: true,
+    includeInfo: false,
+    includeContent: true,
+    includeSolution: false
+  }, function(items) {
+    // console.log(items);
+    options = items
+  });
+
   init()
 
   // Listen DOM modified, call the init method
@@ -95,7 +108,7 @@ $(function () {
     // Init Clipboard plugin
     var clipboard = new Clipboard(selector, {
       text: function () {
-        return Helper.getter.getQuestionMarkdown(questionTitle, window.location.href, $body)
+        return Helper.getter.getQuestionMarkdown(questionTitle, window.location.href, $body, options)
       }
     })
 

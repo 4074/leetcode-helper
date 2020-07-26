@@ -11,19 +11,34 @@
    * @return {String}
    * @api public
    */
-  Getter.prototype.getQuestionMarkdown = function (title, url, $wrap) {
+  Getter.prototype.getQuestionMarkdown = function (title, url, $wrap, options) {
     var isContest = url.indexOf('.com/contest/') >= 0
 
     var question = isContest
-      ? this.getQuestionInfoForContest(title, url, $wrap)
-      : this.getQuestionInfoForProblem(title, url, $wrap)
+      ? this.getQuestionInfoForContest(title, url, $wrap, options)
+      : this.getQuestionInfoForProblem(title, url, $wrap, options)
 
-    var markdown = this.translateToMarkdown(question.title) + '\n\n'
-      + this.translateToMarkdown(question.info) + '\n\n'
-      + this.clearContentMarkdown(this.translateToMarkdown(question.content)) + '\n\n'
+    // var markdown = this.translateToMarkdown(question.title) + '\n\n'
+    //   + this.translateToMarkdown(question.info) + '\n\n'
+    //   + this.clearContentMarkdown(this.translateToMarkdown(question.content)) + '\n\n'
 
+    var markdown = ''
+    if (options.includeTitle) {
+      markdown += this.translateToMarkdown(question.title) + '\n\n'
+    }
+    if (options.includeInfo) {
+      markdown += this.translateToMarkdown(question.info) + '\n\n'
+    }
+    if (options.includeContent) {
+      markdown += this.clearContentMarkdown(this.translateToMarkdown(question.content))
+    }
     // Clear more \n
-    markdown = markdown.replace(/\n{4,}/g, '\n\n\n') + question.answer
+    markdown = markdown.replace(/\n{4,}/g, '\n\n\n')
+    if (options.includeSolution) {
+      markdown += question.answer
+    }
+
+    markdown = markdown.replace(/\n{4,}/g, '\n\n\n')
 
     return markdown
   }
@@ -38,10 +53,11 @@
    * @api private
    * 
    */
-  Getter.prototype.getQuestionInfoForProblem = function (title, url, $wrap) {
+  Getter.prototype.getQuestionInfoForProblem = function (title, url, $wrap, options) {
     var $description = $('[data-key=description-content]')
     // Title
-    title = '<h3><a href="' + url + '">' + title + '</a></h3>'
+    var titleLevel = options.titleLevel
+    title = '<' + titleLevel + '><a href="' + url + '">' + title + '</a></' + titleLevel + '>'
 
     // Difficulty
     var $difficulty = $description.find('div div div').eq(1).find('div').first()
@@ -88,10 +104,11 @@
    * @api private
    * 
    */
-  Getter.prototype.getQuestionInfoForContest = function (title, url, $wrap) {
+  Getter.prototype.getQuestionInfoForContest = function (title, url, $wrap, options) {
     //Title in parameter is not right
     title = $wrap.find('h3').text()
-    title = '<h3><a href="' + url + '">' + title + '</a></h3>'
+    var titleLevel = options.titleLevel
+    title = '<' + titleLevel + '><a href="' + url + '">' + title + '</a></' + titleLevel + '>'
 
     // Info
     var difficultyText = $wrap.find('div.contest-question-info.pull-right > ul > li:nth-child(5) > span').text()
@@ -192,7 +209,7 @@
     $title.parent().parent().parent().find('div:last').find('a').each(function () {
       var $el = $(this)
       topics.push(
-        '<a href="' + location.origin + $el.attr('href') + '">' +  $el.text() + '</a>'
+        '<a href="' + location.origin + $el.attr('href') + '">' + $el.text() + '</a>'
       )
     })
 
