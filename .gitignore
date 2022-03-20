@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+db/
+.vscode
+*.log
+node_modules/
+public/
+.deploy*/
+*.plist
+db.json
+config.json
+**/__pycache__
+**/.ipynb_checkpoints/

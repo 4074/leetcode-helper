@@ -40,20 +40,22 @@
    */
   Getter.prototype.getQuestionInfoForProblem = function (title, url, $wrap) {
     var $description = $('[data-key=description-content]')
-    // Title
-    title = '<h3><a href="' + url + '">' + title + '</a></h3>'
+    
 
     // Difficulty
     var $difficulty = $description.find('div div div').eq(1).find('div').first()
     var difficultyText = $difficulty.text()
     // For CN UI
-    if (!difficultyText) {
+    if (window.location.origin.includes('leetcode-cn.com')) {
       difficultyText = $('[data-degree=easy],[data-degree=medium],[data-degree=hard]').first().text()
     }
-    var info = 'Difficulty: **' + difficultyText + '**'
+    var info = ''
+
+    // Title
+    title = '<h1><a href="' + url + '">' + title + ' --- ' + difficultyText + '</a></h1>'
 
     // Content
-    var content = this.getContentFromDOM(
+    var content = '<br><br>' + this.getContentFromDOM(
       this.findByClassName(this.findByClassName($description, 'div', 'description'), 'div', 'content')
     )
 
@@ -66,9 +68,10 @@
     // Related Topics
     var topics = this.getTopicsFromDOM($description)
     if (topics) {
-      info += '<br><br>' + topics
+      info += topics + '<br><br>'
     }
-
+    
+    
     return {
       url: url,
       title: title,
@@ -91,12 +94,13 @@
   Getter.prototype.getQuestionInfoForContest = function (title, url, $wrap) {
     //Title in parameter is not right
     title = $wrap.find('h3').text()
-    title = '<h3><a href="' + url + '">' + title + '</a></h3>'
+    
 
     // Info
     var difficultyText = $wrap.find('div.contest-question-info.pull-right > ul > li:nth-child(5) > span').text()
-    var info = 'Difficulty: **' + difficultyText + '**'
+    var info = '<br>'
 
+    title = '<h1><a href="' + url + '">' + title + ' --- ' + difficultyText + '</a></h1>'
     // Content
     var content = this.getContentFromDOM(
       this.findByClassName($wrap, 'div', 'question-content')
@@ -167,8 +171,7 @@
       answerLines.push($line.text())
     })
 
-    return '#### Solution'
-      + '\n\nLanguage: **' + language + '**'
+    return '\n\n'+ '## 解法'
       + '\n\n```' + language.toLowerCase() + '\n'
       + answerLines.join('\n')
       + '\n```'
@@ -185,8 +188,14 @@
     var topics = []
 
     var $title = this.findByClassName($wrap, 'div', function ($el) {
+      if (window.location.origin.includes('leetcode-cn.com')) {
+        return $el.html().indexOf('相关标签') === 0
+      }
       return $el.html().indexOf('Related Topics') === 0
     })
+
+
+
     if (!$title || !$title.length) return ''
 
     $title.parent().parent().parent().find('div:last').find('a').each(function () {
