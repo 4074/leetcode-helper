@@ -6,7 +6,8 @@ A chrome extension helps you have fun at [leetcode.com](https://leetcode.com) an
 
 ## Features
 
-Unfortunately, there is only one feature for now.
+1. Copy for markdown
+2. Find videos (beta)
 
 - Copy question content for markdown
 
@@ -14,36 +15,60 @@ Question page:
 
 ![image](screenshots/1.png)
 
-Then, you could click the `Copy the question` button to copy markdown text to clipboard.
+Click the `Copy` button on the right side, the question will be copyed for markdown.
 
 The result for markdown:
 
 ```markdown
-### [344\. Reverse String](https://leetcode.com/problems/reverse-string/description/)
+# [344\. Reverse String](https://leetcode.com/problems/reverse-string/)
 
-Difficulty: **Easy**
+## Description
 
-Write a function that takes a string as input and returns the string reversed.
+Difficulty: **Easy**  
 
-**Example:**  
-Given s = "hello", return "olleh".
+Related Topics: [Two Pointers](https://leetcode.com/tag/two-pointers/), [String](https://leetcode.com/tag/string/), [Recursion](https://leetcode.com/tag/recursion/)
 
-#### My Solution
+
+Write a function that reverses a string. The input string is given as an array of characters `s`.
+
+You must do this by modifying the input array with `O(1)` extra memory.
+
+**Example 1:**
+
+\```
+Input: s = ["h","e","l","l","o"]
+Output: ["o","l","l","e","h"]
+\```
+
+**Example 2:**
+
+\```
+Input: s = ["H","a","n","n","a","h"]
+Output: ["h","a","n","n","a","H"]
+\```
+
+**Constraints:**
+
+*   1 <= s.length <= 10<sup>5</sup>
+*   `s[i]` is a .
+
+
+## Solution
 
 Language: **JavaScript**
 
-/```javascript
+\```javascript
 /**
  * @param {string} s
  * @return {string}
  */
 var reverseString = function(s) {
-    return s.split('').reverse().join('')
+    return s.split('').reverse().join('');
 };
-/```
+\```
 ```
 
-## installation
+## Installation
 
 ### Chrome webstore
 
@@ -56,4 +81,4 @@ var reverseString = function(s) {
 - Open `chrome://extensions/` in your chrome
 - Drag the project folder to the browser.
 
-Then, open a problem page in leetcode, you would see the button.
+Then, open a problem page in leetcode, you would see the buttons.
