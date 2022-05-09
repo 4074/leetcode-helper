@@ -1,11 +1,14 @@
 {
   "manifest_version": 3,
   "name": "Leetcode Helper",
-  "description": "This extension is a useful helper when you code at leetcode.com and leetcode-cn.com.\n1.Copy the question for markdown.",
+  "description": "This extension is a useful helper when you code at leetcode.com and leetcode.cn.\n1.Copy the question for markdown.",
   "version": "1.0.0",
   "content_scripts": [
     {
-      "matches": ["https://leetcode.com/problems/*", "https://leetcode-cn.com/problems/*"],
+      "matches": [
+        "https://leetcode.com/problems/*",
+        "https://leetcode.cn/problems/*"
+      ],
       "js": [
         "build/lhelper.js"
       ]
