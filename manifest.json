@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Leetcode Helper",
-  "description": "This extension is a useful helper when you code at leetcode.com and leetcode.cn.\n1.Copy the question for markdown.",
-  "version": "1.0.0",
+  "description": "This extension is a useful helper when you code at leetcode.com and leetcode.cn",
+  "version": "1.0.1",
   "content_scripts": [
     {
       "matches": [
@@ -14,7 +14,5 @@
       ]
     }
   ],
-  "permissions": [
-    "activeTab"
-  ]
+  "permissions": []
 }
